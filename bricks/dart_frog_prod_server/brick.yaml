@@ -3,10 +3,10 @@ description: A dart_frog prod server
 version: 0.1.0+1
 
 environment:
-  mason: ">=0.1.0-dev <0.1.0"
+  mason: ">=0.1.0-dev <0.2.0"
 
 vars:
-  dartVersion:
+  dart-version:
     type: string
     description: Dart version to be used in the generated Dockerfile.
     default: stable

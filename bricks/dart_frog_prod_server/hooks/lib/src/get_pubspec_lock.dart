@@ -3,17 +3,32 @@ import 'dart:io';
 import 'package:dart_frog_prod_server_hooks/src/pubspec_lock/pubspec_lock.dart';
 import 'package:path/path.dart' as path;
 
-Future<PubspecLock> getPubspecLock(
+PubspecLock getPubspecLock(
   String workingDirectory, {
   path.Context? pathContext,
-}) async {
+}) {
   final pathResolver = pathContext ?? path.context;
-  final pubspecLockFile = File(
-    workingDirectory.isEmpty
-        ? 'pubspec.lock'
-        : pathResolver.join(workingDirectory, 'pubspec.lock'),
-  );
+  Directory? currentDir = Directory(workingDirectory);
 
-  final content = await pubspecLockFile.readAsString();
-  return PubspecLock.fromString(content);
+  while (currentDir != null) {
+    final pubspecLockPath = pathResolver.join(currentDir.path, 'pubspec.lock');
+    final pubspecLockFile = File(pubspecLockPath);
+
+    if (pubspecLockFile.existsSync()) {
+      final content = pubspecLockFile.readAsStringSync();
+      return PubspecLock.fromString(content);
+    }
+
+    currentDir = currentDir.parent;
+
+    // Stop if we reach the root directory.
+    if (pathResolver.equals(
+      currentDir.path,
+      pathResolver.rootPrefix(currentDir.path),
+    )) {
+      currentDir = null;
+    }
+  }
+
+  throw Exception('pubspec.lock not found');
 }

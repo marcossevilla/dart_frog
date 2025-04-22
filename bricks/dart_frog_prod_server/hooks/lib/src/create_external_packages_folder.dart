@@ -13,7 +13,7 @@ Future<List<String>> createExternalPackagesFolder({
   CopyPath copyPath = io.copyPath,
 }) async {
   final pathResolver = path.context;
-  final pubspecLock = await getPubspecLock(
+  final pubspecLock = getPubspecLock(
     projectDirectory.path,
     pathContext: path.context,
   );

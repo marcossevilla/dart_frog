@@ -85,7 +85,7 @@ Future<void> preGen(
     path.join(projectDirectory.path, 'Dockerfile'),
   );
 
-  final internalPathDependencies = await getInternalPathDependencies(
+  final internalPathDependencies = getInternalPathDependencies(
     projectDirectory,
   );
 
